@@ -2,7 +2,7 @@
 
 현재 보유하고 있는 장르, 내용(게임) 을 선택하면  최적으로 만들수 있는 게임을 알려줍니다.
 
-![images/game-dev-story-tool.png](Game Dev Tool)
+![https://github.com/AndersonJo/game-dev-story-combo-tool/raw/master/images/game-dev-story-tool.png](Game Dev Tool)
 
 ## 실행방법
 
