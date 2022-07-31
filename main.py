@@ -82,7 +82,6 @@ class GameDev(QWidget):
             with open(saved_path, 'rb') as f:
                 data = pickle.load(f)
                 for i, checked in enumerate(data['genre']):
-                    print(i, checked)
                     self.genre_widget.grid.itemAt(i).widget().setChecked(checked)
 
                 for i, checked in enumerate(data['game']):
