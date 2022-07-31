@@ -1,8 +1,11 @@
+import pickle
 import sys
 import bisect
+from pathlib import Path
+from tempfile import gettempdir
 from typing import List, Optional, Tuple
 
-from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QGridLayout, QCheckBox, QScrollArea, QPushButton
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QGridLayout, QCheckBox, QScrollArea, QPushButton, QMessageBox
 from PyQt5.QtCore import Qt, pyqtSignal, QObject, pyqtSlot
 
 from data import generate_data, SCORE_LABELS
@@ -66,9 +69,24 @@ class GameDev(QWidget):
         self.main.addWidget(output_scroll, 1, 2)
 
         # Buttons
+        save_button = QPushButton('Save')
+        save_button.pressed.connect(self.on_save)
         reset_button = QPushButton('Reset')
         reset_button.pressed.connect(self.on_reset)
+        self.main.addWidget(save_button, 2, 1)
         self.main.addWidget(reset_button, 2, 2)
+
+        # Load
+        saved_path = Path(gettempdir()) / 'game-dev.pkl'
+        if saved_path.exists():
+            with open(saved_path, 'rb') as f:
+                data = pickle.load(f)
+                for i, checked in enumerate(data['genre']):
+                    print(i, checked)
+                    self.genre_widget.grid.itemAt(i).widget().setChecked(checked)
+
+                for i, checked in enumerate(data['game']):
+                    self.game_widget.grid.itemAt(i).widget().setChecked(checked)
 
     @pyqtSlot()
     def on_checkbox_changed(self, ):
@@ -84,6 +102,20 @@ class GameDev(QWidget):
                 if genre in self.data and game in self.data[genre]:
                     output_data.append((self.data[genre][game], genre, game))
         self.output_widget.set_data(output_data)
+
+    @pyqtSlot()
+    def on_save(self):
+        genre_checks = self.genre_widget.list_checked()
+        game_checks = self.game_widget.list_checked()
+
+        with open(Path(gettempdir()) / 'game-dev.pkl', 'wb') as f:
+            pickle.dump({'genre': genre_checks,
+                         'game': game_checks}, f)
+
+        msgBox = QMessageBox()
+        msgBox.setText('saved')
+        msgBox.setWindowTitle('Saved')
+        msgBox.show()
 
     @pyqtSlot()
     def on_reset(self):
