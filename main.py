@@ -88,6 +88,7 @@ class GameDev(QWidget):
     @pyqtSlot()
     def on_reset(self):
         self.game_widget.clear_checkboxes()
+        self.genre_widget.clear_checkboxes()
 
 
 class SelectWidget(QWidget):
