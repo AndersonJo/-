@@ -1,5 +1,8 @@
 # Project
 .idea
+dist
+build
+*.spec
 
 # Python
 *.pyc
